@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     // ✅ Use the correct Genkit model reference format
     // Available models: gemini-2.5-flash, gemini-1.5-pro, gemini-1.5-flash
     const result = await ai.generate({
-      model: googleAI.model('gemini-2.5-flash'), // ← Use googleAI.model() method
+      model: 'gemini-2.5-flash',
       prompt: prompt, // ← Back to simple prompt format
       config: {
         temperature: 0.7,
