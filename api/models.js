@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
     // Generate text using Gemini model
     const result = await ai.generate({
-      model: 'gemini-2.5-pro',
+      model: 'gemini-2.5-flash-lite'',
       prompt: prompt,
       config: {
         temperature: 0.7,
