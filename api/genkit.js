@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
     // Generate content with Gemini (use exact model name!)
     const result = await ai.generate({
-      model: "googleai/gemini-2.0-flash",
+      model: "googleai/models/gemini-2.0-flash",
       prompt: prompt,
       config: {
         temperature: 0.7,
