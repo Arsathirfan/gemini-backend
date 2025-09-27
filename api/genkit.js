@@ -1,25 +1,25 @@
-import { genkit } from 'genkit';
-import { googleAI } from '@genkit-ai/googleai';
+import { genkit } from "genkit";
+import { googleAI } from "@genkit-ai/googleai";
 
 // Initialize Genkit with Google AI
 const ai = genkit({
-  plugins: [googleAI()],
+  plugins: [googleAI({ apiKey: process.env.GOOGLE_API_KEY })],
 });
 
 export default async function handler(req, res) {
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Only POST method allowed' });
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Only POST method allowed" });
     }
 
     const { prompt } = req.body || {};
     if (!prompt) {
-      return res.status(400).json({ error: 'Missing prompt in request body' });
+      return res.status(400).json({ error: "Missing prompt in request body" });
     }
 
-    // Generate content with Gemini
+    // Generate content with Gemini (use exact model name!)
     const result = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: "googleai/gemini-2.5-pro-preview-03-25",
       prompt: prompt,
       config: {
         temperature: 0.7,
@@ -32,11 +32,11 @@ export default async function handler(req, res) {
       text: result.text,
     });
   } catch (err) {
-    console.error('Genkit error:', err);
-    res.status(500).json({ 
+    console.error("Genkit error:", err);
+    res.status(500).json({
       success: false,
-      error: err.message || 'Unknown error occurred',
-      details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+      error: err.message || "Unknown error occurred",
+      details: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
   }
 }
