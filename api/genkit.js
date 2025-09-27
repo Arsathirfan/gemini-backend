@@ -1,12 +1,9 @@
-import { configureGenkit } from '@genkit-ai/core';
+import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/googleai';
-import { generate } from '@genkit-ai/ai';
 
-// Configure Genkit with Google AI
-configureGenkit({
+// Initialize Genkit with Google AI
+const ai = genkit({
   plugins: [googleAI()],
-  logLevel: 'debug',
-  enableTracingAndMetrics: false,
 });
 
 export default async function handler(req, res) {
@@ -21,7 +18,7 @@ export default async function handler(req, res) {
     }
 
     // Generate content with Gemini
-    const result = await generate({
+    const result = await ai.generate({
       model: 'googleai/gemini-1.5-flash',
       prompt: prompt,
       config: {
@@ -32,8 +29,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      text: result.text(),
-      usage: result.usage,
+      text: result.text,
     });
   } catch (err) {
     console.error('Genkit error:', err);
