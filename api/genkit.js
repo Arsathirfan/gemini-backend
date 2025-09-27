@@ -25,7 +25,12 @@ export default async function handler(req, res) {
     // Available models: gemini-1.5-pro, gemini-1.5-flash, gemini-2.0-pro, gemini-2.5-flash
     const result = await ai.generate({
       model: 'googleai/gemini-1.5-pro', // ← Changed from gemini-2.5-pro
-      input: prompt,
+      messages: [
+        {
+          role: 'user',
+          content: [{ text: prompt }]
+        }
+      ],
       config: {
         temperature: 0.7,
         maxOutputTokens: 1000,
@@ -34,7 +39,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      text: result.outputText,
+      text: result.text, // ← Changed from result.outputText
     });
   } catch (err) {
     console.error('Genkit error:', err);
