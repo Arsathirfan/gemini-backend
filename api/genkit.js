@@ -1,8 +1,8 @@
-import { genkit } from "@genkit-ai/core";
+import { ai } from "@genkit-ai/core";
 import { googleAI } from "@genkit-ai/googleai";
 
-// Initialize Genkit once
-genkit.use(googleAI({ apiKey: process.env.GOOGLE_API_KEY }));
+// Initialize Google AI provider
+ai.use(googleAI({ apiKey: process.env.GOOGLE_API_KEY }));
 
 export default async function handler(req, res) {
   try {
@@ -16,16 +16,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing prompt" });
     }
 
-    // Ask Gemini
-    const result = await genkit.run({
+    // Run Gemini with Genkit
+    const result = await ai.generate({
       model: "gemini-1.5-flash",
       input: prompt,
     });
 
-    // Genkit returns a structured object → safest is to `JSON.stringify`
-    return res.status(200).json(result);
+    res.status(200).json(result);
   } catch (err) {
-    console.error("Genkit crashed:", err);
-    return res.status(500).json({ error: err.message || "Unknown error" });
+    console.error("Genkit error:", err);
+    res.status(500).json({ error: err.message || "Unknown error" });
   }
 }
