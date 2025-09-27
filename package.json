@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "@genkit-ai/core": "^1.12.0",
-    "@genkit-ai/googleai": "^1.12.0"
+    "genkit": "^0.9.0",
+    "@genkit-ai/googleai": "^0.9.0"
   }
 }
