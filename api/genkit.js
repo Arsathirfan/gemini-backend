@@ -21,16 +21,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing prompt in request body' });
     }
 
-    // ✅ Use the correct Gemini model names for Genkit
-    // Available models: gemini-1.5-pro, gemini-1.5-flash, gemini-2.0-pro, gemini-2.5-flash
+    // ✅ Use the correct Genkit model reference format
+    // Available models: gemini-2.5-flash, gemini-1.5-pro, gemini-1.5-flash
     const result = await ai.generate({
-      model: 'googleai/gemini-1.5-pro', // ← Changed from gemini-2.5-pro
-      messages: [
-        {
-          role: 'user',
-          content: [{ text: prompt }]
-        }
-      ],
+      model: googleAI.model('gemini-2.5-flash'), // ← Use googleAI.model() method
+      prompt: prompt, // ← Back to simple prompt format
       config: {
         temperature: 0.7,
         maxOutputTokens: 1000,
@@ -39,7 +34,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      text: result.text, // ← Changed from result.outputText
+      text: result.text(), // ← Use result.text() method
     });
   } catch (err) {
     console.error('Genkit error:', err);
