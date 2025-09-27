@@ -1,15 +1,14 @@
-import express from "express";
-import bodyParser from "body-parser";
 import { genkit } from "@genkit-ai/core";
 import { googleAI } from "@genkit-ai/googleai";
 
-const app = express();
-app.use(bodyParser.json());
-
-// Init Genkit with Gemini provider
+// Initialize Genkit with GoogleAI
 genkit.use(googleAI({ apiKey: process.env.GOOGLE_API_KEY }));
 
-app.post("/api/genkit", async (req, res) => {
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST supported" });
+  }
+
   try {
     const { prompt } = req.body;
 
@@ -17,17 +16,15 @@ app.post("/api/genkit", async (req, res) => {
       return res.status(400).json({ error: "Missing prompt" });
     }
 
-    // Call Gemini via Genkit
+    // Call Gemini with Genkit
     const response = await genkit.run({
-      model: "gemini-1.5-flash", // You can change to "gemini-1.5-pro" if needed
+      model: "gemini-1.5-flash",
       input: prompt,
     });
 
-    res.json({ text: response.output });
+    res.status(200).json({ text: response.output });
   } catch (err) {
-    console.error(err);
+    console.error("Genkit Error:", err);
     res.status(500).json({ error: err.message });
   }
-});
-
-export default app;
+}
