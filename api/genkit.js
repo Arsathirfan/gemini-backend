@@ -1,7 +1,7 @@
 import { ai } from "@genkit-ai/core";
 import { googleAI } from "@genkit-ai/googleai";
 
-// Initialize Google AI provider
+// Initialize Genkit with Google AI
 ai.use(googleAI({ apiKey: process.env.GOOGLE_API_KEY }));
 
 export default async function handler(req, res) {
@@ -16,9 +16,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing prompt" });
     }
 
-    // Run Gemini with Genkit
+    // Generate content with Gemini
     const result = await ai.generate({
-      model: "gemini-1.5-flash",
+      model: "gemini-1.5-flash", // can also use gemini-1.5-pro
       input: prompt,
     });
 
