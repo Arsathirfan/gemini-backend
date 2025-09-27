@@ -1,11 +1,11 @@
 import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/googleai';
 
-// ✅ Initialize Genkit with Google AI provider
+// Initialize Genkit with Google AI
 const ai = genkit({
   plugins: [
     googleAI({
-      apiKey: process.env.GEMINI_API_KEY,
+      apiKey: process.env.GEMINI_API_KEY, // Put your key in environment variables
     }),
   ],
 });
@@ -21,10 +21,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing prompt in request body' });
     }
 
-    // ✅ Use the working Gemini model
+    // Generate text using Gemini model
     const result = await ai.generate({
-      model: 'googleai/gemini-2.5-pro',
-      input: prompt,
+      model: 'gemini-2.5-pro',
+      prompt: prompt,
       config: {
         temperature: 0.7,
         maxOutputTokens: 1000,
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      text: result.outputText,
+      text: result.text(),
     });
   } catch (err) {
     console.error('Genkit error:', err);
