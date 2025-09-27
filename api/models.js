@@ -1,5 +1,5 @@
-import { genkit } from 'genkit';
-import { googleAI } from '@genkit-ai/googleai';
+import { chat, genkit } from 'genkit/beta';
+import { googleAI, gemini20Flash } from '@genkit-ai/googleai';
 
 // Initialize Genkit with Google AI
 const ai = genkit({
@@ -21,9 +21,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing prompt in request body' });
     }
 
-    // Generate text using Gemini model
-    const result = await ai.generate({
-      model: 'gemini-2.5-flash-lite'',
+    // Generate text using Gemini 2.0 Flash model with beta syntax
+    const result = await chat({
+      model: gemini20Flash,
       prompt: prompt,
       config: {
         temperature: 0.7,
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      text: result.text(),
+      text: result.text,
     });
   } catch (err) {
     console.error('Genkit error:', err);
