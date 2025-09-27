@@ -17,7 +17,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing prompt" });
     }
 
-    // Call Gemini with Genkit
     const result = await ai.generate({
       model: "gemini-2.0-flash",
       input: prompt,
@@ -25,7 +24,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ text: result.output[0].content });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Genkit Error:", err);
+    res.status(500).json({ error: "Internal Server Error", details: err.message });
   }
 }
