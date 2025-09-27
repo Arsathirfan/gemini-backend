@@ -1,7 +1,6 @@
 import { genkit } from "genkit";
 import { googleAI } from "@genkit-ai/googleai";
 
-// Initialize Genkit with Google AI
 const ai = genkit({
   plugins: [googleAI({ apiKey: process.env.GOOGLE_API_KEY })],
 });
@@ -17,10 +16,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing prompt in request body" });
     }
 
-    // Generate content with Gemini (use exact model name!)
     const result = await ai.generate({
-      model: "googleai/models/gemini-2.5-pro-preview-03-25",
-      prompt: prompt,
+      model: "googleai:gemini-2.5-pro-preview-03-25", // ✅ correct format
+      prompt,
       config: {
         temperature: 0.7,
         maxOutputTokens: 1000,
@@ -35,8 +33,7 @@ export default async function handler(req, res) {
     console.error("Genkit error:", err);
     res.status(500).json({
       success: false,
-      error: err.message || "Unknown error occurred",
-      details: process.env.NODE_ENV === "development" ? err.stack : undefined,
+      error: err.message || "Unknown error",
     });
   }
 }
